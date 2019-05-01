@@ -1,3 +1,3 @@
-Author: Zach Gyorffy
+Author: Zach Gyorffy\n
 Application Name: Incentive Tracker
 -------------------------------------------------------------
