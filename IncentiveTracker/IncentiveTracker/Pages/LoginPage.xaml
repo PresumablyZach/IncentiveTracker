@@ -1,0 +1,18 @@
+﻿<Page
+    x:Class="IncentiveTracker.LoginPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:IncentiveTracker"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid RequestedTheme="Dark">
+        <StackPanel HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Orientation="Horizontal">
+            <TextBox x:Name="usrName" Header="Please Enter Your Name" FontSize="30" MaxLength="32" Margin="0,0,0,0"  Width="400" InputScope="PersonalFullName"/>
+            <Button x:Name="btnLogin" Content="SUBMIT" Height= "45" Width="128" Margin="20,42,0,0" Click="BtnLogin_Click"/>
+        </StackPanel>
+    </Grid>
+</Page>
