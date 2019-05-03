@@ -1,7 +1,7 @@
 Incentive Tracker
 =================
-README
------------------
+<br>
+
 ### Author: Zach Gyorffy
 ### Version: 1.0
 <br>
