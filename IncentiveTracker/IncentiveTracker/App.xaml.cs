@@ -24,8 +24,10 @@ using Windows.UI.Popups;
  * Version: 1.0
  * Application: IncentiveTracker
  * File: App
- * Description: Handles launch, suspension, failure, etc. events.
- *              Also holds the global variables needed for the app.
+ * Description: Handles launch, suspension, failure, etc. events,
+ *              and saving/loading files. Also holds the global 
+ *              variables needed for the app.
+ *              
  */
 
 namespace IncentiveTracker
@@ -79,16 +81,8 @@ namespace IncentiveTracker
             }
 
             //Reads in the roster file and creates the roster list
-
             roster = new List<Person>();
             LoadRoster();
-            /*roster.Add(new Person("Zach"));
-            roster.Add(new Person("Ivonne"));
-            roster.Add(new Person("Kerri-Ann"));
-            roster.Add(new Person("Victoria"));
-            roster.Add(new Person("Jesse"));
-            roster.Add(new Person("Tim"));
-            roster.Add(new Person("Laura"));*/
 
         }
 
@@ -110,6 +104,7 @@ namespace IncentiveTracker
             deferral.Complete();
         }
 
+        // Saves the roster to the local app data roster file
         private static async void SaveRoster()
         {
             StorageFolder localFolder = ApplicationData.Current.LocalFolder;
@@ -118,6 +113,7 @@ namespace IncentiveTracker
 
             string rawRoster = "";
 
+            // Parses the roster into a loadable format
             for (int i = 0; i < roster.Count; i++)
             {
                 string name = roster[i].propName;
@@ -126,10 +122,11 @@ namespace IncentiveTracker
             }
 
             await FileIO.WriteTextAsync(rosterFile, rawRoster);
-            Debug.WriteLine("RAW: " + rawRoster + "\n" + "File Contents: " + await localFolder.GetFileAsync("roster.txt"));
+            Debug.WriteLine("RAW: " + rawRoster + "\n" + "File Contents: " + await FileIO.ReadTextAsync(rosterFile));
 
         }
 
+        // Loads the roster from the local app data roster file
         private async void LoadRoster()
         {
             StorageFolder storageFolder = ApplicationData.Current.LocalFolder;
@@ -138,6 +135,13 @@ namespace IncentiveTracker
 
             string text = await FileIO.ReadTextAsync(rosterFile);
 
+            /*
+             * Parsing Scheme:
+             * name,points;name,points;...name,points;
+             * 
+             * Splits the raw string frist by semi colon (to split each member), 
+             * then by comma (to seperate their name from their points).
+             */ 
             string[] rawPeople = text.Split(';');
             for (int i = 0; i < rawPeople.Length - 1; i++)
             {
@@ -157,12 +161,16 @@ namespace IncentiveTracker
             }
         }
 
+        // Adds a new member to the roster with the given name
+        // Then saves the roster file
         public static void AddToRoster (string name)
         {
             roster.Add(new Person(name));
             SaveRoster();
         }
 
+        // Searches the roster for a member with the given name and removes them (if they exist)
+        // Then saves the roster file
         public static void DeleteFromRoster (string name)
         {
             for (int i = 0; i < roster.Count; i++)

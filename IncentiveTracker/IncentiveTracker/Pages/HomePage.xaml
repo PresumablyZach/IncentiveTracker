@@ -10,7 +10,6 @@
     <Grid RequestedTheme="Dark">
         <NavigationView x:Name="NavigationViewControl"
                         Loaded="NavigationViewControl_Loaded"
-                        SelectionChanged="NavigationViewControl_SelectionChanged"
                         ItemInvoked="NavigationViewControl_ItemInvoked"
                         IsTabStop="False"
                         PaneTitle="Username"

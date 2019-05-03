@@ -55,11 +55,6 @@ namespace IncentiveTracker
             NavigationViewControl.PaneTitle = App.currentUser;
         }
 
-        private void NavigationViewControl_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
-        {
-
-        }
-
         private void NavigationViewControl_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
         {
             if (args.IsSettingsInvoked)
