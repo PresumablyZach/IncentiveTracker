@@ -5,10 +5,42 @@
     xmlns:local="using:IncentiveTracker"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    mc:Ignorable="d">
 
-    <Grid>
-        <TextBlock x:Name="txtName" FontSize="50">Hello</TextBlock>
+    <Grid RequestedTheme="Dark">
+        <NavigationView x:Name="NavigationViewControl"
+                        Loaded="NavigationViewControl_Loaded"
+                        SelectionChanged="NavigationViewControl_SelectionChanged"
+                        ItemInvoked="NavigationViewControl_ItemInvoked"
+                        IsTabStop="False"
+                        >
+            <NavigationView.MenuItems>
+                <NavigationViewItem x:Name="navHome" Icon="Home" Tag="Home_Page">
+                    <TextBlock Tag="Nav_Home">Home</TextBlock>
+                </NavigationViewItem>
+                <NavigationViewItem x:Name="navRoster" Icon="People" Tag="Roster_Page">
+                    <TextBlock Tag="Nav_Roster">Roster</TextBlock>
+                </NavigationViewItem>
+                <NavigationViewItem x:Name="navSwitch" Icon="Switch" Tag="Switch_Page">
+                    <TextBlock Tag="Nav_Switch">Switch Incentives</TextBlock>
+                </NavigationViewItem>
+            </NavigationView.MenuItems>
+            <Frame x:Name="contentFrame"></Frame>
+        </NavigationView>
+
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger
+                            MinWindowWidth="{x:Bind NavigationViewControl.CompactModeThresholdWidth}"/>
+                    </VisualState.StateTriggers>
+
+                    <VisualState.Setters>
+                        <Setter Target="NavigationViewControl.PaneDisplayMode" Value="Top"/>
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
     </Grid>
 </Page>
