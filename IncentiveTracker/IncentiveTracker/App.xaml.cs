@@ -156,6 +156,11 @@ namespace IncentiveTracker
             }
         }
 
+        public static void AddToRoster(string name)
+        {
+            roster.Add(new Person(name));
+        }
+
         private async void fileTest()
         {
             string text = "Test";

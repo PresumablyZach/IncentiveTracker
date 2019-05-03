@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -32,7 +33,7 @@ namespace IncentiveTracker.Pages
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            roster = new List<Person>(App.roster);
+            roster = App.roster.OrderBy(o=>o.propName).ToList();
 
             int max = roster.Count;
 
@@ -48,17 +49,38 @@ namespace IncentiveTracker.Pages
 
         private void BtnAdd_Click(object sender, RoutedEventArgs e)
         {
-            
+            ShowAddDialog();
         }
 
-        private void BtnAdd_Click_1(object sender, RoutedEventArgs e)
+        private void AddUser_Opened(ContentDialog sender, ContentDialogOpenedEventArgs args)
         {
-
+            txtAddName.Text = "";
         }
 
-        private void BtnFlyAdd_Click(object sender, RoutedEventArgs e)
+        private void TxtAddName_TextChanged(object sender, TextChangedEventArgs e)
         {
+            if (txtAddName.Text.Length > 0)
+            {
+                AddUser.IsPrimaryButtonEnabled = true;
+            }
+            else
+            {
+                AddUser.IsPrimaryButtonEnabled = false;
+            }
+        }
 
+        private async void ShowAddDialog()
+        {
+            await AddUser.ShowAsync();
+        }
+
+        private void AddUser_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+        {
+            App.AddToRoster(txtAddName.Text);
+            ListViewItem item = new ListViewItem();
+            item.Content = txtAddName.Text;
+            rosterList.Items.Add(item);
         }
     }
+        
 }

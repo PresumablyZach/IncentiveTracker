@@ -8,11 +8,25 @@
     mc:Ignorable="d">
 
     <Grid RequestedTheme="Dark">
+        
+        <ContentDialog x:Name="AddUser"
+                       PrimaryButtonText="Add" 
+                       IsPrimaryButtonEnabled="False"
+                       CloseButtonText="Cancel"
+                       Opened="AddUser_Opened"
+                       PrimaryButtonClick="AddUser_PrimaryButtonClick"
+                       Title="Add New Member">
+           
+            <StackPanel>
+                <TextBox x:Name="txtAddName" Header="Name" TextChanged="TxtAddName_TextChanged" />
+            </StackPanel>
+        </ContentDialog>
+
         <StackPanel Orientation="Vertical">
             <CommandBar>
                 <AppBarButton x:Name="btnAdd" Icon="Add" Label="Add" Click="BtnAdd_Click"/>
             </CommandBar>
-            <ListView x:Name="rosterList" Height="auto"/>
+            <ListView x:Name="rosterList" Height="auto"/>            
         </StackPanel>
     </Grid>
 </Page>
