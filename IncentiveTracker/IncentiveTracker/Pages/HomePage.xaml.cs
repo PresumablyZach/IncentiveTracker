@@ -52,6 +52,7 @@ namespace IncentiveTracker
                 }
             }
             contentFrame.Navigate(typeof(IncentivePage));
+            NavigationViewControl.PaneTitle = App.currentUser;
         }
 
         private void NavigationViewControl_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)

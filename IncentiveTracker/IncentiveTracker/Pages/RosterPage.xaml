@@ -8,8 +8,11 @@
     mc:Ignorable="d">
 
     <Grid RequestedTheme="Dark">
-        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="50">
-            Roster
-        </TextBlock>
+        <StackPanel Orientation="Vertical">
+            <CommandBar>
+                <AppBarButton x:Name="btnAdd" Icon="Add" Label="Add" Click="BtnAdd_Click"/>
+            </CommandBar>
+            <ListView x:Name="rosterList" Height="auto"/>
+        </StackPanel>
     </Grid>
 </Page>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -14,6 +15,9 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using Windows.Storage;
+using Windows.UI.Core.Preview;
+using Windows.UI.Popups;
 
 /*
  * Author: Zach Gyorffy
@@ -29,6 +33,7 @@ namespace IncentiveTracker
     sealed partial class App : Application
     {
         public static String currentUser;
+        public static List<Person> roster;
 
         // Initialize the Application
         public App()
@@ -73,6 +78,18 @@ namespace IncentiveTracker
                 Window.Current.Activate();
             }
 
+            //Reads in the roster file and creates the roster list
+
+            roster = new List<Person>();
+            LoadRoster();
+            /*roster.Add(new Person("Zach"));
+            roster.Add(new Person("Ivonne"));
+            roster.Add(new Person("Kerri-Ann"));
+            roster.Add(new Person("Victoria"));
+            roster.Add(new Person("Jesse"));
+            roster.Add(new Person("Tim"));
+            roster.Add(new Person("Laura"));*/
+
         }
 
         // Invoked if/when navigation to a certain page fails
@@ -89,7 +106,104 @@ namespace IncentiveTracker
         {
             var deferral = e.SuspendingOperation.GetDeferral();
             //TODO: Save application state and stop any background activity
+            SaveRoster();
             deferral.Complete();
+        }
+
+        private async void SaveRoster()
+        {
+            StorageFolder localFolder = ApplicationData.Current.LocalFolder;
+            StorageFile file = await localFolder.CreateFileAsync("roster.txt", CreationCollisionOption.OpenIfExists);
+            StorageFile rosterFile = await localFolder.GetFileAsync("roster.txt");
+
+            string rawRoster = "";
+
+            for (int i = 0; i < roster.Count; i++)
+            {
+                string name = roster[i].propName;
+                int pointVal = roster[i].propPointVal;
+                rawRoster = String.Concat(rawRoster, (name +","+pointVal+";"));
+            }
+
+            await FileIO.WriteTextAsync(rosterFile, rawRoster);
+
+        }
+
+        private async void LoadRoster()
+        {
+            StorageFolder storageFolder = ApplicationData.Current.LocalFolder;
+
+            StorageFile rosterFile = await storageFolder.GetFileAsync("roster.txt");
+
+            string text = await FileIO.ReadTextAsync(rosterFile);
+
+            string[] rawPeople = text.Split(';');
+            for (int i = 0; i < rawPeople.Length - 1; i++)
+            {
+                string[] rawPerson = rawPeople[i].Split(',');
+                string name = rawPerson[0];
+                int pointVal = 0;
+                try
+                {
+                    pointVal = Convert.ToInt32(rawPerson[1]);
+                }
+                catch (FormatException) { }
+                catch (OverflowException) { }
+
+                roster.Add(new Person(name));
+                roster[roster.Count - 1].propPointVal = pointVal;
+
+            }
+        }
+
+        private async void fileTest()
+        {
+            string text = "Test";
+
+            //Create the Local Roster file
+            /*Windows.Storage.StorageFolder storageFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
+            Windows.Storage.StorageFile sampleFile = await storageFolder.CreateFileAsync("roster.txt", Windows.Storage.CreationCollisionOption.ReplaceExisting);
+
+            Windows.Storage.StorageFile rosterFile = await storageFolder.GetFileAsync("roster.txt");
+            await Windows.Storage.FileIO.WriteTextAsync(rosterFile, "Zach,0;Ivonne,0;Tim,0;");*/
+
+            StorageFolder localFolder = ApplicationData.Current.LocalFolder;
+            StorageFile file = await localFolder.CreateFileAsync("roster.txt", CreationCollisionOption.OpenIfExists);
+            StorageFile rosterFile = await localFolder.GetFileAsync("roster.txt");
+
+            Debug.WriteLine("File Contents: " + await FileIO.ReadTextAsync(rosterFile));
+
+        }
+
+        private async void getRosterContents()
+        {
+            StorageFolder storageFolder = ApplicationData.Current.LocalFolder;
+
+            StorageFile rosterFile = await storageFolder.GetFileAsync("roster.txt");
+
+            Debug.WriteLine("File Contents: " + await FileIO.ReadTextAsync(rosterFile));
+
+            string text = await FileIO.ReadTextAsync(rosterFile);
+
+            string[] rawPeople = text.Split(';');
+            for(int i = 0; i < rawPeople.Length - 1; i++)
+            {
+                string[] rawPerson = rawPeople[i].Split(',');
+                Debug.WriteLine("i= " + i + " : " + rawPerson[0]);
+                string name = rawPerson[0];
+                int pointVal = 0;
+                try
+                {
+                    pointVal = System.Convert.ToInt32(rawPerson[1]);
+                }
+                catch (FormatException) { }
+                catch (OverflowException) { }
+
+                roster.Add(new Person(name));
+                roster[roster.Count - 1].propPointVal = pointVal;
+
+            }
+
         }
     }
 }

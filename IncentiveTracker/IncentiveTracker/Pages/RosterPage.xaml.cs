@@ -23,9 +23,42 @@ namespace IncentiveTracker.Pages
     /// </summary>
     public sealed partial class RosterPage : Page
     {
+        private List<Person> roster;
+
         public RosterPage()
         {
             this.InitializeComponent();
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            roster = new List<Person>(App.roster);
+
+            int max = roster.Count;
+
+            for (int i = 0; i < max; i++)
+            {
+                ListViewItem item = new ListViewItem();
+                item.Content = roster[i].propName;
+                rosterList.Items.Add(item);
+            }
+
+            base.OnNavigatedTo(e);
+        }
+
+        private void BtnAdd_Click(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
+        private void BtnAdd_Click_1(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void BtnFlyAdd_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

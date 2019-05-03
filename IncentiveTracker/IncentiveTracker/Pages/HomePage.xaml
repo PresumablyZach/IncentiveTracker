@@ -13,6 +13,7 @@
                         SelectionChanged="NavigationViewControl_SelectionChanged"
                         ItemInvoked="NavigationViewControl_ItemInvoked"
                         IsTabStop="False"
+                        PaneTitle="Username"
                         >
             <NavigationView.MenuItems>
                 <NavigationViewItem x:Name="navHome" Icon="Home" Tag="Home_Page">
