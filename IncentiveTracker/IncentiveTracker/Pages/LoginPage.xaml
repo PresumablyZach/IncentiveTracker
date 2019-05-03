@@ -11,7 +11,7 @@
         <StackPanel HorizontalAlignment="Center"
                         VerticalAlignment="Center"
                         Orientation="Horizontal">
-            <TextBox x:Name="usrName" Header="Please Enter Your Name" FontSize="30" MaxLength="32" Margin="0,0,0,0"  Width="400" InputScope="PersonalFullName"/>
+            <TextBox x:Name="usrName" Header="Please Enter Your Name" FontSize="30" MaxLength="32" Margin="0,0,0,0"  Width="400" InputScope="PersonalFullName" KeyDown="UsrName_KeyDown"/>
             <Button x:Name="btnLogin" Content="SUBMIT" Height= "45" Width="128" Margin="20,42,0,0" Click="BtnLogin_Click"/>
         </StackPanel>
     </Grid>

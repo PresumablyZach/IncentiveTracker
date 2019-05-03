@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -47,7 +48,7 @@ namespace IncentiveTracker
 
             if (currentUser.Length <= 0)
             {
-                DisplayIvalidLoginDialog();
+                DisplayInvalidLoginDialog();
             }
             else
             {
@@ -56,8 +57,17 @@ namespace IncentiveTracker
             }
         }
 
+        // Allows User to press enter instead of clicking button
+        private void UsrName_KeyDown(object sender, KeyRoutedEventArgs e)
+        {
+            if (e.Key == VirtualKey.Enter)
+            {
+                BtnLogin_Click(this, new RoutedEventArgs());
+            }
+        }
+
         // Dialog to prompt the user for proper name entry
-        private async void DisplayIvalidLoginDialog()
+        private async void DisplayInvalidLoginDialog()
         {
             ContentDialog invalidLoginDialog = new ContentDialog
             {
