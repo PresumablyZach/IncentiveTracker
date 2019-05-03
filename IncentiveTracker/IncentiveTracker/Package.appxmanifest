@@ -7,11 +7,11 @@
   IgnorableNamespaces="uap mp">
 
   <Identity
-    Name="d96ce8ab-e198-4b4d-ba71-b8a13693076e"
+    Name="9fae0134-ee4b-406b-8fa3-dbd0157d78c4"
     Publisher="CN=zgyor"
     Version="1.0.0.0" />
 
-  <mp:PhoneIdentity PhoneProductId="d96ce8ab-e198-4b4d-ba71-b8a13693076e" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
+  <mp:PhoneIdentity PhoneProductId="9fae0134-ee4b-406b-8fa3-dbd0157d78c4" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
     <DisplayName>IncentiveTracker</DisplayName>
