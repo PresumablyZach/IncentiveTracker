@@ -22,11 +22,27 @@
             </StackPanel>
         </ContentDialog>
 
+        <ContentDialog x:Name="DeleteUser"
+                       PrimaryButtonText="Delete" 
+                       IsPrimaryButtonEnabled="true"
+                       CloseButtonText="Cancel"
+                       PrimaryButtonClick="DeleteUser_PrimaryButtonClick"
+                       Title="Delete a Member">
+
+            <StackPanel>
+                <ComboBox x:Name="comboRoster" Height="auto" Width="400"
+                          Header="Choose who you would like to delete"
+                          ItemsSource="{x:Bind observableRoster}"
+                          SelectedIndex="0"/>
+            </StackPanel>
+        </ContentDialog>
+
         <StackPanel Orientation="Vertical">
             <CommandBar>
                 <AppBarButton x:Name="btnAdd" Icon="Add" Label="Add" Click="BtnAdd_Click"/>
+                <AppBarButton x:Name="btnDelete" Icon="Delete" Label="Delete" Click="BtnDelete_Click"/>
             </CommandBar>
-            <ListView x:Name="rosterList" Height="auto"/>            
+            <ListView x:Name="rosterList" Height="auto"/>
         </StackPanel>
     </Grid>
 </Page>

@@ -1,6 +1,7 @@
 ﻿using IncentiveTracker.Pages;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -25,6 +26,8 @@ namespace IncentiveTracker.Pages
     public sealed partial class RosterPage : Page
     {
         private List<Person> roster;
+        private ObservableCollection<string> observableRoster = new ObservableCollection<string>();
+        private MenuFlyout rightClickMenu = new MenuFlyout();
 
         public RosterPage()
         {
@@ -33,18 +36,18 @@ namespace IncentiveTracker.Pages
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            roster = App.roster.OrderBy(o=>o.propName).ToList();
-
-            int max = roster.Count;
-
-            for (int i = 0; i < max; i++)
-            {
-                ListViewItem item = new ListViewItem();
-                item.Content = roster[i].propName;
-                rosterList.Items.Add(item);
-            }
-
+            RefreshListView();
             base.OnNavigatedTo(e);
+        }
+
+        private async void ShowAddDialog()
+        {
+            await AddUser.ShowAsync();
+        }
+
+        private async void ShowDeleteDialog()
+        {
+            await DeleteUser.ShowAsync();
         }
 
         private void BtnAdd_Click(object sender, RoutedEventArgs e)
@@ -69,18 +72,70 @@ namespace IncentiveTracker.Pages
             }
         }
 
-        private async void ShowAddDialog()
-        {
-            await AddUser.ShowAsync();
-        }
-
         private void AddUser_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
             App.AddToRoster(txtAddName.Text);
-            ListViewItem item = new ListViewItem();
-            item.Content = txtAddName.Text;
-            rosterList.Items.Add(item);
+            RefreshListView();
         }
+
+        private void BtnDelete_Click(object sender, RoutedEventArgs e)
+        {
+            ShowDeleteDialog();
+        }
+
+        private void DeleteUser_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+        {
+            DeleteUser.Hide();
+            DeleteUserConfirmDialog();
+        }
+
+        private async void DeleteUserConfirmDialog()
+        {
+            ContentDialog deleteUserDialog = new ContentDialog
+            {
+                
+
+                Title = "Delete " + comboRoster.SelectedValue.ToString() + " permanently?",
+                Content = "If you delete " + comboRoster.SelectedValue.ToString() + " from the roster, you won't be able to recover them. Do you want to delete them?",
+                PrimaryButtonText = "Delete",
+                CloseButtonText = "Cancel"
+            };
+
+            ContentDialogResult result = await deleteUserDialog.ShowAsync();
+
+            if (result == ContentDialogResult.Primary)
+            {
+                App.DeleteFromRoster(comboRoster.SelectedValue.ToString());
+                RefreshListView();
+            }
+            else { }
+        }
+
+        // Refreshes the ListView with the roster from the main App file
+        private void RefreshListView()
+        {
+            // Sorts the roster alphabetically
+            roster = App.roster.OrderBy(o => o.propName).ToList();
+
+            // Clears the ListView and ComboBox
+            rosterList.Items.Clear();
+            observableRoster.Clear();
+
+            int max = roster.Count;
+
+            // Adds each member from the roster to the List
+            for (int i = 0; i < max; i++)
+            {
+                ListViewItem item = new ListViewItem();
+
+                item.Content = roster[i].propName;
+                rosterList.Items.Add(item);
+                observableRoster.Add(roster[i].propName);
+            }
+        }
+
+        
+
     }
         
 }

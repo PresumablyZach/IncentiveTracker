@@ -110,7 +110,7 @@ namespace IncentiveTracker
             deferral.Complete();
         }
 
-        private async void SaveRoster()
+        private static async void SaveRoster()
         {
             StorageFolder localFolder = ApplicationData.Current.LocalFolder;
             StorageFile file = await localFolder.CreateFileAsync("roster.txt", CreationCollisionOption.OpenIfExists);
@@ -126,13 +126,14 @@ namespace IncentiveTracker
             }
 
             await FileIO.WriteTextAsync(rosterFile, rawRoster);
+            Debug.WriteLine("RAW: " + rawRoster + "\n" + "File Contents: " + await localFolder.GetFileAsync("roster.txt"));
 
         }
 
         private async void LoadRoster()
         {
             StorageFolder storageFolder = ApplicationData.Current.LocalFolder;
-
+            StorageFile file = await storageFolder.CreateFileAsync("roster.txt", CreationCollisionOption.OpenIfExists);
             StorageFile rosterFile = await storageFolder.GetFileAsync("roster.txt");
 
             string text = await FileIO.ReadTextAsync(rosterFile);
@@ -156,59 +157,22 @@ namespace IncentiveTracker
             }
         }
 
-        public static void AddToRoster(string name)
+        public static void AddToRoster (string name)
         {
             roster.Add(new Person(name));
+            SaveRoster();
         }
 
-        private async void fileTest()
+        public static void DeleteFromRoster (string name)
         {
-            string text = "Test";
-
-            //Create the Local Roster file
-            /*Windows.Storage.StorageFolder storageFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
-            Windows.Storage.StorageFile sampleFile = await storageFolder.CreateFileAsync("roster.txt", Windows.Storage.CreationCollisionOption.ReplaceExisting);
-
-            Windows.Storage.StorageFile rosterFile = await storageFolder.GetFileAsync("roster.txt");
-            await Windows.Storage.FileIO.WriteTextAsync(rosterFile, "Zach,0;Ivonne,0;Tim,0;");*/
-
-            StorageFolder localFolder = ApplicationData.Current.LocalFolder;
-            StorageFile file = await localFolder.CreateFileAsync("roster.txt", CreationCollisionOption.OpenIfExists);
-            StorageFile rosterFile = await localFolder.GetFileAsync("roster.txt");
-
-            Debug.WriteLine("File Contents: " + await FileIO.ReadTextAsync(rosterFile));
-
-        }
-
-        private async void getRosterContents()
-        {
-            StorageFolder storageFolder = ApplicationData.Current.LocalFolder;
-
-            StorageFile rosterFile = await storageFolder.GetFileAsync("roster.txt");
-
-            Debug.WriteLine("File Contents: " + await FileIO.ReadTextAsync(rosterFile));
-
-            string text = await FileIO.ReadTextAsync(rosterFile);
-
-            string[] rawPeople = text.Split(';');
-            for(int i = 0; i < rawPeople.Length - 1; i++)
+            for (int i = 0; i < roster.Count; i++)
             {
-                string[] rawPerson = rawPeople[i].Split(',');
-                Debug.WriteLine("i= " + i + " : " + rawPerson[0]);
-                string name = rawPerson[0];
-                int pointVal = 0;
-                try
+                if (roster[i].propName == name)
                 {
-                    pointVal = System.Convert.ToInt32(rawPerson[1]);
+                    roster.RemoveAt(i);
                 }
-                catch (FormatException) { }
-                catch (OverflowException) { }
-
-                roster.Add(new Person(name));
-                roster[roster.Count - 1].propPointVal = pointVal;
-
             }
-
+            SaveRoster();
         }
     }
 }
